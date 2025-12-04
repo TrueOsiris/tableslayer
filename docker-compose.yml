@@ -25,7 +25,7 @@ services:
     environment:
       # libSQL / Turso connection
       TURSO_APP_DB_URL: "libsql://db:8089?tls=0"
-      TURSO_APP_DB_AUTH_TOKEN: ""
+      # TURSO_APP_DB_AUTH_TOKEN: ""
 
       # App-specific env (fill these with your real values or use an .env file)
       ENV_NAME: "development"

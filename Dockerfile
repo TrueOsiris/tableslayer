@@ -22,6 +22,8 @@ COPY . .
 # Install dependencies
 RUN pnpm install
 
+ENV TURSO_APP_DB_URL="file:dev.db"
+ENV TURSO_APP_DB_AUTH_TOKEN=""
 # Build the web app using Turbo with increased heap size
 RUN NODE_OPTIONS="--max-old-space-size=4096" pnpm turbo run web#build
 
