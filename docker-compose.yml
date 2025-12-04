@@ -1,0 +1,64 @@
+services:
+  db:
+    image: ghcr.io/tursodatabase/libsql-server:latest
+    container_name: tableslayer-db
+    command:
+      [
+        "--http-listen-addr",
+        "0.0.0.0:8089",
+        "--dir",
+        "/var/lib/libsql"
+      ]
+    volumes:
+      - libsql-data:/var/lib/libsql
+    # Expose DB to host only if you want to inspect it from your machine
+    ports:
+      - "8089:8089"
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: tableslayer-web
+    depends_on:
+      - db
+    environment:
+      # libSQL / Turso connection
+      TURSO_APP_DB_URL: "libsql://db:8089?tls=0"
+      TURSO_APP_DB_AUTH_TOKEN: ""
+
+      # App-specific env (fill these with your real values or use an .env file)
+      ENV_NAME: "development"
+      BASE_URL: "http://localhost:3000"
+      BODY_SIZE_LIMIT: "20M"
+
+      # Uncomment/fill as needed:
+      # GITHUB_PR_NUMBER: ""
+      # TURSO_API_TOKEN: ""
+      # RESEND_TOKEN: ""
+      # RESEND_AUDIENCE_ID: ""
+      # DEV_EMAIL: ""
+      # CLOUDFLARE_ACCOUNT_ID: ""
+      # CLOUDFLARE_R2_ACCESS_KEY: ""
+      # CLOUDFLARE_R2_SECRET_KEY: ""
+      # CLOUDFLARE_R2_BUCKET_NAME: ""
+      # SENTRY_DSN: ""
+      # SENTRY_AUTH_TOKEN: ""
+      # STRIPE_SECRET_KEY: ""
+      # STRIPE_WEBHOOK_KEY: ""
+      # STRIPE_LIFETIME_ID: ""
+      # STRIPE_YEARLY_ID: ""
+      # STRIPE_PRICE_ID_MONTHLY: ""
+      # STRIPE_PRICE_ID_YEARLY: ""
+      # STRIPE_PRICE_ID_LIFETIME: ""
+      # STRIPE_API_KEY: ""
+
+    ports:
+      - "3000:3000"
+    # If you want live reload in dev, you can mount source; for now we keep it simple
+    # volumes:
+    #   - .:/app
+
+volumes:
+  libsql-data:
+
