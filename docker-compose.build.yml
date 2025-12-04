@@ -8,7 +8,9 @@ services:
       - libsql-data:/var/lib/libsql
 
   web:
-    image: trueosiris/tableslayer:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
     depends_on:
       - db
     environment:
